@@ -1,0 +1,304 @@
+#include <iostream>
+using namespace std;
+
+class tnode{
+    char data[10];
+    tnode *lchild;
+    tnode *rchild;
+    friend class tree;
+};
+
+class tree{
+    public:
+    tnode *root;
+    void create_nr();
+    void inorder_r();
+    void preorder_r();
+    void postorder_r();
+    void inorder_display(tnode *node);
+    void preorder_display(tnode *node);
+    void postorder_display(tnode *node);
+    void non_recursive_inorder();
+    void non_recursive_preorder();
+    void non_recursive_postorder();
+    tree(){
+        root = NULL;
+    }
+};
+
+class stack{
+    int top;
+    tnode *data[30];
+
+public:
+    stack(){
+        top = -1;
+    }
+    void push(tnode *temp);
+    tnode *pop();
+    bool empty();
+    friend class tree;
+};
+
+void stack::push(tnode *temp){
+    top++;
+    data[top] = temp;
+}
+
+bool stack::empty(){
+    if (top == -1){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+tnode *stack ::pop(){
+    tnode *temp;
+    temp = data[top];
+    top--;
+    return temp;
+}
+
+void tree::create_nr(){
+    int flag;
+    char ch, c;
+    tnode *temp, *curr;
+    if (root == NULL){
+        root = new tnode;
+        root->lchild = NULL;
+        root->rchild = NULL;
+        cout << "Enter the root: " << endl;
+        cin >> root->data;
+    }
+    do{
+        temp = root;
+        curr = new tnode;
+        flag = 0;
+        cout << "Enter Data: " << endl;
+        cin >> curr->data;
+        while (flag == 0){
+            cout << "Choose Left or Right (l/r) " << endl;
+            cin >> c;
+            if (c == 'l'){
+                if (temp->lchild == NULL){
+                    temp->lchild = curr;
+                    flag = 1;
+                }
+                temp = temp->lchild;
+            }
+            else{
+                if (c == 'r'){
+                    if (temp->rchild == NULL){
+                        temp->rchild = curr;
+                        flag = 1;
+                    }
+                    temp = temp->rchild;
+                }
+            }
+        }
+        cout << "Do you wish to continue(y/n): " << endl;
+        cin >> ch;
+    }while (ch == 'y'||ch=='Y');
+}
+void tree::inorder_r(){
+    inorder_display(root);
+}
+void tree::preorder_r(){
+    preorder_display(root);
+}
+void tree::postorder_r(){
+    postorder_display(root);
+}
+void tree::inorder_display(tnode *node){
+    if (node == NULL){
+        return;
+    }
+    inorder_display(node->lchild);
+    cout << node->data << " ";
+    inorder_display(node->rchild);
+}
+void tree::preorder_display(tnode *node){
+    if (node == NULL){
+        return;
+    }
+    cout << node->data << " ";
+    preorder_display(node->lchild);
+    preorder_display(node->rchild);
+}
+void tree::postorder_display(tnode *node){
+    if (node == NULL){
+        return;
+    }
+    postorder_display(node->lchild);
+    postorder_display(node->rchild);
+    cout << node->data << " ";
+}
+void tree::non_recursive_inorder(){
+    stack s;
+    tnode *temp;
+    temp = root;
+    while (1){
+        while (temp != NULL){
+            s.push(temp);
+            temp = temp->lchild;
+        }
+        if (s.empty()){
+            break;
+        }
+        temp = s.pop();
+        cout << temp->data << " " << endl;
+        temp = temp->rchild;
+    }
+}
+void tree::non_recursive_preorder(){
+    stack s;
+    tnode *temp;
+    temp = root;
+    while (1)
+    {
+        while (temp != NULL){
+            s.push(temp);
+            cout << temp->data << " " << endl;
+            temp = temp->lchild;
+        }
+        if (s.empty()){
+            break;
+        }
+        temp = s.pop();
+        temp = temp->rchild;
+    }
+}
+
+void tree::non_recursive_postorder(){
+    stack s;
+    tnode *temp;
+    temp = root;
+    while (1){
+        while (temp != NULL){
+            s.push(temp);
+            temp = temp->lchild;
+        }
+        if (s.empty()){
+            break;
+        }
+        if (s.data[s.top]->rchild == NULL){
+            temp = s.pop();
+            cout << temp->data;
+        }
+        while (not s.empty() && s.data[s.top]->rchild == temp){
+            temp = s.pop();
+            cout << temp->data;
+        }
+        if (s.empty()){
+            break;
+        }
+        temp = s.data[s.top]->rchild;
+    }
+}
+int main()
+{
+    int ch;
+    char choice;
+    tree bt1;
+    tree bt2;
+    tree bt3;
+    do{
+        cout<<"\n*MENU*"<<endl;
+        cout<<"1.Create a Binary Tree"<<endl;
+        cout<<"2.Preorder"<<endl;
+        cout<<"3.Inorder"<<endl;
+        cout<<"4.Postorder"<<endl;
+        cout<<"Enter your choice: ";
+        cin>>ch;
+        switch(ch){
+            case 1:
+            cout<<"****BINARY TREE 1****"<<endl;
+            bt1.create_nr();
+            cout<<"****BINARY TREE 2****"<<endl;
+            bt2.create_nr();
+            cout<<"****BINARY TREE 3****"<<endl;
+            bt3.create_nr();
+            break;
+            case 2:
+            int a;
+            cout<<"1.Recursive"<<endl;
+            cout<<"2.Non-Recursive"<<endl;
+            cout<<"Enter your choice: ";
+            cin>>a;
+            switch(a){
+                case 1:
+                cout<<"\nThe Preorder of tree 1 is: "<<endl;
+                bt1.preorder_r();
+                cout<<"\nThe Preorder of tree 2 is: "<<endl;
+                bt2.preorder_r();
+                cout<<"\nThe Preorder of tree 3 is: "<<endl;
+                bt3.preorder_r();
+                break;
+                case 2:
+                cout<<"\nThe Preorder of tree 1 is: "<<endl;
+                bt1.non_recursive_preorder();
+                cout<<"\nThe Preorder of tree 2 is: "<<endl;
+                bt2.non_recursive_preorder();
+                cout<<"\nThe Preorder of tree 3 is: "<<endl;
+                bt3.non_recursive_preorder();
+            }
+            break;
+            case 3:
+            int b;
+            cout<<"1.Recursive"<<endl;
+            cout<<"2.Non-Recursive"<<endl;
+            cout<<"Enter your choice: ";
+            cin>>b;
+            switch(b){
+                case 1:
+                cout<<"\nThe inorder of tree 1 is: "<<endl;
+                bt1.inorder_r();
+                cout<<"\nThe inorder of tree 2 is: "<<endl;
+                bt2.inorder_r();
+                cout<<"\nThe inorder of tree 3 is: "<<endl;
+                bt3.inorder_r();
+                break;
+                case 2:
+                cout<<"\nThe inorder of tree 1 is: "<<endl;
+                bt1.non_recursive_inorder();
+                cout<<"\nThe inorder of tree 2 is: "<<endl;
+                bt2.non_recursive_inorder();
+                cout<<"\nThe inorder of tree 3 is: "<<endl;
+                bt3.non_recursive_inorder();
+                break;
+            }
+            break;
+            case 4:
+            int c;
+            cout<<"1.Recursive"<<endl;
+            cout<<"2.Non-Recursive"<<endl;
+            cout<<"Enter your choice: ";
+            cin>>c;
+            switch(c){
+                case 1:
+                cout<<"\nThe Postorder of tree 1 is: "<<endl;
+                bt1.postorder_r();
+                cout<<"\nThe Postorder of tree 2 is: "<<endl;
+                bt2.postorder_r();
+                cout<<"\nThe Postorder of tree 3 is: "<<endl;
+                bt3.postorder_r();
+                break;
+                case 2:
+                cout<<"\nThe Postorder of tree 1 is: "<<endl;
+                bt1.non_recursive_postorder();
+                cout<<"\nThe Postorder of tree 2 is: "<<endl;
+                bt2.non_recursive_postorder();
+                cout<<"\nThe Postorder of tree 3 is: "<<endl;
+                bt3.non_recursive_postorder();
+                break;
+            }
+            break;
+        }
+        cout<<"\nDo u want to exit?(y/n) ";
+        cin>>choice;
+    }
+    while(choice=='y'||choice=='Y');
+    return 0;
+}
