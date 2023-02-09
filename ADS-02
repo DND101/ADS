@@ -1,3 +1,11 @@
+//========================================================================
+// Name        : ads-02.cpp
+// Author      : Naveen Sahu
+// Version     :
+// Copyright   : Your copyright notice
+// Description : Hello World in C++, Ansi-style
+//========================================================================
+
 #include <iostream>
 using namespace std;
 
