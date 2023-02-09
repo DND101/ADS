@@ -1,0 +1,119 @@
+/============================================================================
+// Name        : ads-01.c
+// Author      : Naveen Sahu
+// Version     :
+// Copyright   : Your copyright notice
+// Description : Hello World in C, Ansi-style
+//============================================================================
+#include<stdio.h>
+#include<stdlib.h>
+struct node{
+	int coef;
+	int exp;
+	struct node *next;
+};
+void create(struct node *H) {
+	struct node *curr, *temp;
+	temp = H;
+	int ch;
+	do {
+		curr = (struct node *) malloc(sizeof(struct node));
+		printf("\nEnter coefficient of polynomial: ");
+		scanf("%d",&temp->coef);
+		printf("Enter power of x: ");
+		scanf("%d",&temp->exp);
+		curr->next = H;
+		temp->next = curr;
+		temp = curr;
+		printf("Do you want to continue?");
+		printf("\n1.Yes\n2.No\n");
+		printf("Enter your choice: ");
+		scanf("%d",&ch);
+	}
+	while(ch==1);
+}
+void display(struct node *H) {
+	struct node *curr;
+	curr=H;
+		while (curr->next != H){
+			printf("%dx^%d", curr->coef, curr->exp);
+			curr = curr->next;
+			if(curr->next != H){
+			    printf(" + ");
+			}
+		}
+	printf("\n");
+}
+void add(struct node *H1,struct node *H2){
+	struct node *temp1, *temp2, *temp3,*H3, *temp;
+	H3= (struct node *) malloc(sizeof(struct node));
+	temp3=H3;
+	temp1=H1;
+	temp2=H2;
+	while(temp1->next!=H1 && temp2->next!=H2){
+	    temp=(struct node *)malloc(sizeof(struct node));
+		if(temp1->exp==temp2->exp){
+			temp3->coef=temp1->coef+temp2->coef;
+			temp3->exp=temp2->exp;
+			temp3->next=temp;
+			temp->next=H3;
+			temp3= temp;
+			temp1=temp1->next;
+			temp2=temp2->next;
+		}
+		else if(temp1->exp < temp2->exp){
+			temp3->coef=temp2->coef;
+			temp3->exp=temp2->exp;
+			temp3->next=temp;
+			temp->next=H3;
+			temp3=temp;
+			temp2=temp2->next;
+		//	temp3=temp3->next;
+		}
+		else{
+			temp3->coef=temp1->coef;
+			temp3->exp=temp1->exp;
+			temp3->next=temp;
+			temp->next=H3;
+			temp3=temp;
+			temp1=temp1->next;
+			//temp3=temp3->next;
+		}
+	}
+	while(temp1->next!=H1){
+	    temp=(struct node *)malloc(sizeof(struct node));
+	    temp3->coef=temp1->coef;
+	    temp3->exp=temp1->exp;
+	    temp3->next=temp;
+	    temp->next=H3;
+	    temp3=temp;
+	    temp1=temp1->next;
+	}
+	while(temp2->next!=H2){
+	    temp=(struct node *)malloc(sizeof(struct node));
+	    temp3->coef=temp2->coef;
+	    temp3->exp=temp2->exp;
+	    temp3->next=temp;
+	    temp->next=H3;
+	    temp3=temp;
+	    temp2=temp2->next;
+	}
+	display(H3);
+}
+
+int main(){
+    struct node *H1;
+    struct node *H2;
+    H1= (struct node *) malloc(sizeof(struct node));
+    H2= (struct node *) malloc(sizeof(struct node));
+    printf("--------------First Polynomial--------------");
+    create(H1);
+    printf("--------------Second Polynomial--------------");
+    create(H2);
+    printf("First Polynomial is: ");
+    display(H1);
+    printf("Second Polynomial is: ");
+    display(H2);
+    printf("Addition of these two polynomial is: ");
+    add(H1,H2);
+}
