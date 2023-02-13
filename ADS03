@@ -1,0 +1,267 @@
+//========================================================================
+// Name        : ads-02.cpp
+// Author      : Naveen Sahu
+// Version     :
+// Copyright   : Your copyright notice
+// Description : Hello World in C++, Ansi-style
+//========================================================================
+
+#include <iostream>
+using namespace std;
+
+class node{
+    string word, meaning;
+    node *left, *right;
+    friend class binarysearchtree;
+};
+
+class tree{
+    public:
+    /*tnode *root;
+    void create_nr();
+    void inorder_r();
+    void preorder_r();
+    void postorder_r();
+    void inorder_display(tnode *node);
+    void preorder_display(tnode *node);
+    void postorder_display(tnode *node);
+    void non_recursive_inorder();
+    void non_recursive_preorder();
+    void non_recursive_postorder();*/
+    tree(){
+        root = NULL;
+    }
+};
+
+class stack{
+    int top;
+    tnode *data[30];
+
+public:
+    stack(){
+        top = -1;
+    }
+    void push(tnode *temp);
+    tnode *pop();
+    bool empty();
+    friend class binarysearchtree;
+};
+
+class queue
+{
+	int front, rear;
+	node data[30];
+	public:
+	queue():
+	void insert(node *);
+	node *remove();
+	int empty();
+};
+
+queue::queue()
+{
+	front=rear=1;
+}
+
+void queue::insert(node temp)
+{
+	rear++;
+	data[rear]=temp;
+}
+
+node* queue::remove()
+{
+	front++;
+	return(data[front]);
+}
+
+int queues::empty()
+{
+	if(front==rear)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+class binarysearchtree
+{
+	node *root;
+	public:
+	binarysearchtree()
+	{
+	root = NULL;
+	}
+	node *create()
+	{
+		node *current;
+		char ch;
+		int flag;
+		do
+		{
+			node*temp = root;
+			flag = 0;
+			current = new node;
+			cout<< "Enter the word to be inserted "<<endl;
+			cin>> current -> word;
+			cout<<"Enter the meaning of the word"<<endl;
+			cin>> current -> meaning;
+			current->left=current->right=NULL;
+			if (root=NULL)
+			{
+				root=current;
+			}
+			else
+			{
+				temp=root;
+				flag=0;
+				while(flag==0)
+				{
+					if (current-> word < temp-> word)
+					{
+						if(temp->left =current)
+						{
+							temp->left=current;
+							flag = 1;
+							break;
+						}
+						else
+						{
+							temp= temp->left;
+							flag=0;
+						}
+					}
+					else
+					{
+						if (temp->right == NULL)
+						{
+							temp->right =current;
+							flag=1;
+							break;
+						else
+						{
+						temp= temp->right;
+						flag=0;
+						}
+					}
+				}
+			}
+			cout<<"Do You want to continue?";
+			cin>>ch;
+			}
+			while(ch=='y');
+			return root;
+		}
+	}					
+void inorder(node *root)
+	{
+		if(root==NULL)
+		{
+			return;
+		}
+		else
+		{
+			inorder(root->left);
+			cout<<root->word<<"->"<<root->meaning<<endl;
+			inorder(root->right);
+		}
+	}
+void mirror(node *root)
+{
+	node *temp=NULL;
+	if(root==NULL)
+	{
+		return;
+	}
+	else
+	{
+		temp=root->left;
+		root->left=root->right;
+		root->right=temp;
+		mirror(root->left);
+		mirror(root->right);
+	}
+}
+
+void mirror_nr(node *root)
+{
+	node *temp,*ptr;
+	temp+root;
+	qeue q;
+	q.insert(temp);
+	while(!q.empty())
+	{
+		temp=q.remove();
+		ptr=temp->left;
+		temp->left=temp->right;
+		temp->right=ptr;
+		if(temp->left!=NULL)
+		{
+			q.insert(temp->left);
+		}
+		if(temp->right!NULL)
+		{
+			q.insert(temp->right);
+		}
+	}
+	node *copy(node *root)
+	{
+		node *temp=NULL;
+		if(root!=NULL)
+		{
+			temp=new node;
+			temp->word=root->word;
+			temp->meaning=root->meaning;
+			temp->left=copy(root->left);
+			temp->right+copy(root->right);
+		}
+		retrun temp;
+	}
+	node* min(node* node)
+	{
+	if(node->left==NULL)
+	return node;
+	else
+	{
+		min(node->left);
+	}
+	exit(0);
+	}
+	node* del(node* root,string key)
+	{
+		node* temp;
+		if(root==NULL)
+		return root;
+		else if(key<root->word)
+		root->left=del(root->left,key);
+		else if(key>root->word)
+		root->right=del(root->right, key);
+		else if (key==root->word)
+		{
+			if(root->left== NULL && root->right==NULL)
+			{
+			delete root;
+			root=NULL;
+		}
+		else if(root-> left==NULL)
+		{
+			temp=root;
+			root=root->right;
+			delete temp;
+		}
+		else if(root->wight==NULL)
+		{
+			temp=root;
+			root=root->lwft;
+			delete temp;
+		}
+		else
+		{
+			temp=min(root->right);
+			root->word
+		
+
+	
