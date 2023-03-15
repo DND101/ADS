@@ -1,0 +1,218 @@
+#include <iostream>
+using namespace std;
+
+class GNode {
+  int id;
+  char name;
+  GNode* next;
+  friend class Graph;
+};
+
+class Queue
+{
+int front, rear;
+int data[30];
+
+public:
+Queue();
+void push(int);
+int pop();
+bool isEmpty();
+};
+
+Queue::Queue()
+{
+front = -1;
+rear = -1;
+}
+
+void Queue::push(int val)
+{
+++rear;
+data[rear] = val;
+}
+
+int Queue::pop()
+{
+++front;
+return data[front];
+}
+
+bool Queue::isEmpty()
+{
+return front == rear;
+}
+
+
+
+class Graph {
+  GNode* head[20];
+  int n;
+
+ public:
+  Graph();
+  void create();
+  void display();
+  void dfs_r();
+  void dfs_r(int a[],int id);
+  void bfs();
+  void bfs(int a[],int id);
+};
+
+Graph::Graph() {
+  cout << "Enter no. of id: " << endl;
+  cin >> n;
+
+  for (int id= 0; id< n; id++) {
+    head[id] = new GNode;
+    head[id]->id = id;
+    head[id]->next=NULL;
+    cout<<"Enter user"<<id<<"name:";
+    cin>>head[id]->name;
+  }
+}
+
+void Graph::create() {
+  for (int id = 0; id < n; id++) {
+    GNode* temp = head[id];
+
+    char ch;
+    cout<<"Do the id have adjacent node?"<<endl;
+    cin>>ch;
+    while (ch == 'y') {
+      int v;
+      cout << "Enter adjacent vertex to " << head[id]->id<< endl;
+      cin >> v;
+      if (v == id) {
+        cout << "Self loops not allowed" << endl;
+      } else {
+        GNode* curr = new GNode;
+        curr->id= v;
+        curr->next = NULL;
+        temp->next = curr;
+        temp = temp->next;
+      }
+
+      cout << "Do you want to enter more node? (y/n): ";
+      cin >> ch;
+    }
+  }
+}
+
+void Graph::display()
+{
+  for (int id= 0; id< n; id++)
+   {
+    GNode* temp = head[id]->next;
+    while (temp->next != NULL)
+    {
+      cout << temp->name<< "->";
+      temp = temp->next;
+    }
+    cout << temp->name << endl;
+  }
+}
+
+
+void Graph::dfs_r(){
+int v;
+int visited[10];
+for(int id=0;id<n;id++){
+visited[id]=0;
+}
+cout<<"enter the friend id:"<<endl;
+cin>>v;
+dfs_r(visited,v);
+}
+
+void Graph::dfs_r(int visited[],int v){
+GNode *temp;
+temp=head[v]->next;
+cout<<head[v]->name<<" ";
+visited[v]=1;
+while(temp!=NULL)
+{
+if(!visited[temp->id])
+  dfs_r(visited,temp->id);
+temp=temp->next;
+
+}
+}
+
+void Graph::bfs()
+{
+int v;
+cout<<"Enter the friend id:"<<endl;
+cin>>v;
+int visited[10];
+for(int id=0;id<n;id++)
+visited[id]=0;
+visited[v]=1;
+Queue q;
+GNode* curr;
+q.push(v);
+while(!q.isEmpty())
+{
+v=q.pop();
+curr=head[v];
+cout<<curr->name<<" ";
+curr=curr->next;
+while(curr!=NULL)
+{
+if(visited[curr->id]==0)
+{
+visited[curr->id]=1;
+q.push(curr->id);
+}
+curr=curr->next;
+}
+}
+}
+
+
+int main() {
+  Graph a;
+  int ch;  
+  do
+  {
+    cout<<"Enter the choice:"<<endl;
+    cout<<"1.Create"<<endl;
+    cout<<"2.display: \t"<<endl;
+    cout<<"3.dfs recursive\t"<<endl;
+    cout<<"4.bfs\t"<<endl;
+    cout<<"5.exit\n"<<endl;
+    cin>>ch;
+    switch(ch)
+{
+case 1:
+cout<<"-----------CREATION-------------"<<endl;
+a.create();
+break;
+
+case 2:
+cout<<"-----------DISPLAY-------------"<<endl;
+a.display();
+cout<<endl;
+break;
+
+case 3:
+cout<<"-----------RECURSIVE DFS-------------"<<endl;
+a.dfs_r();
+cout<<endl;
+break;
+
+case 4:
+cout<<"-----------BFS-------------"<<endl;
+a.bfs();
+cout<<endl;
+break;
+
+case 5:
+cout<<"Bye bye!!"<<endl;
+break;
+}
+if(ch==5)break;
+}
+while(1);
+return 0;
+}
