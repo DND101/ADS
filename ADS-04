@@ -1,0 +1,138 @@
+//========================================================================
+// Name        : ADS-04.cpp
+// Author      : Naveen Sahu
+// Version     :
+// Copyright   : Your copyright notice
+// Description : Hello World in C++, Ansi-style
+//========================================================================
+#include <iostream>
+
+using namespace std;
+class tbtnode {
+    char data;
+    bool rbit, lbit;
+    tbtnode * right, * left;
+    friend class tbt;
+    public:
+        tbtnode();
+};
+tbtnode::tbtnode() {
+    lbit = 1;
+    rbit = 1;
+}
+class tbt {
+    tbtnode * head;
+    public:
+        void create();
+    void preorder();
+    tbtnode * presuccr(tbtnode * temp);
+    void inorder();
+    tbtnode * insuccr(tbtnode * temp);
+    tbt();
+};
+tbt::tbt() {
+    head = new tbtnode;
+    head - > left = head;
+    head - > right = head;
+    head - > rbit = 0;
+}
+void tbt::create() {
+    tbtnode * root;
+    root = new tbtnode;
+    cout << "enter root: " << endl;
+    cin >> root - > data;
+    head - > lbit = 0;
+    root - > left = head;
+    root - > right = head;
+    head - > left = root;
+    char con;
+    do {
+        char op;
+        tbtnode * temp, * curr;
+        int flag = 0;
+        temp = root;
+        curr = new tbtnode;
+        cout << "enter new node: " << endl;
+        cin >> curr - > data;
+        while (flag == 0) {
+            cout << "do you want want to add to the right or the left" << temp - > data << endl;
+            cin >> op;
+            if (op == 'l') {
+                if (temp - > lbit == 1) {
+                    curr - > right = temp;
+                    curr - > left = temp - > left;
+                    temp - > left = curr;
+                    temp - > lbit = 0;
+                    flag = 1;
+                } else {
+                    temp = temp - > left;
+                }
+            }
+            if (op == 'r') {
+                if (temp - > rbit == 1) {
+                    curr - > left = temp;
+                    curr - > right = temp - > right;
+                    temp - > rbit = 0;
+                    temp - > right = curr;
+                    flag = 1;
+                } else {
+                    temp = temp - > right;
+                }
+            }
+        }
+        cout << "do you want to continue(y/n): " << endl;
+        cin >> con;
+    } while (con == 'y');
+}
+
+void tbt::inorder() {
+    tbtnode * temp;
+    temp = head;
+    while (1) {
+        temp = insuccr(temp);
+        if (temp == head) {
+            break;
+        }
+
+        cout << temp - > data;
+        cout << " ";
+    }
+
+}
+tbtnode * tbt::insuccr(tbtnode * temp) {
+    tbtnode * x;
+    x = temp - > right;
+    if (temp - > rbit == 0) {
+        while (x - > lbit == 0) {
+            x = x - > left;
+        }
+    }
+    return x;
+}
+void tbt::preorder() {
+    tbtnode * temp;
+    temp = head - > left;
+    while (temp != head) {
+        cout << temp - > data;
+        cout << " ";
+        while (temp - > lbit != 1) {
+            temp = temp - > left;
+            cout << temp - > data;
+            cout << " ";
+        }
+        while (temp - > rbit == 1) {
+            temp = temp - > right;
+        }
+        temp = temp - > right;
+    }
+}
+int main() {
+    tbt a;
+    a.create();
+    cout << "inorder:" << endl;
+    a.inorder();
+    cout << endl;
+    cout << "preorder:" << endl;
+    a.preorder();
+    return 0;
+}
