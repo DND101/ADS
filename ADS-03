@@ -1,5 +1,5 @@
 //========================================================================
-// Name        : ads-02.cpp
+// Name        : ADS-03.cpp
 // Author      : Naveen Sahu
 // Version     :
 // Copyright   : Your copyright notice
@@ -7,261 +7,214 @@
 //========================================================================
 
 #include <iostream>
+#include <string.h>
+
 using namespace std;
 
-class node{
-    string word, meaning;
-    node *left, *right;
-    friend class binarysearchtree;
+class Node {
+char data[10];
+Node* left;
+Node* right;
+friend class Tree;
 };
 
-class tree{
-    public:
-    /*tnode *root;
-    void create_nr();
-    void inorder_r();
-    void preorder_r();
-    void postorder_r();
-    void inorder_display(tnode *node);
-    void preorder_display(tnode *node);
-    void postorder_display(tnode *node);
-    void non_recursive_inorder();
-    void non_recursive_preorder();
-    void non_recursive_postorder();*/
-    tree(){
-        root = NULL;
-    }
-};
-
-class stack{
-    int top;
-    tnode *data[30];
+class Queue {
+int front, rear;
+Node* data[30];
 
 public:
-    stack(){
-        top = -1;
-    }
-    void push(tnode *temp);
-    tnode *pop();
-    bool empty();
-    friend class binarysearchtree;
+Queue();
+void push(Node*);
+Node* pop();
+bool isEmpty();
 };
 
-class queue
-{
-	int front, rear;
-	node data[30];
-	public:
-	queue():
-	void insert(node *);
-	node *remove();
-	int empty();
+Queue::Queue() {
+front = -1;
+rear = -1;
+}
+
+void Queue::push(Node* val) {
+++rear;
+data[rear] = val;
+}
+
+Node* Queue::pop() {
+++front;
+return data[front];
+}
+
+bool Queue::isEmpty() {
+return front == rear;
+}
+
+class Tree {
+Node* root;
+
+public:
+Tree();
+void create_nr();
+void display();
+int search_nr(char*);
+void search_r();
+int search_r(Node*, char*);
+Tree copy_r();
+Node* copy_r(Node*);
+
 };
 
-queue::queue()
-{
-	front=rear=1;
+Tree::Tree() {
+root = NULL;
 }
 
-void queue::insert(node temp)
-{
-	rear++;
-	data[rear]=temp;
+void Tree::create_nr() {
+root = new Node;
+cout << "Enter root node: ";
+cin >> root->data;
+root->left = NULL;
+root->right = NULL;
+
+while (1) {
+char ch;
+cout << "Do you want to enter another node? (y/n) ";
+cin >> ch;
+
+if (ch != 'y')
+break;
+
+Node* curr = new Node;
+cout << "Enter current node: ";
+cin >> curr->data;
+curr->left = NULL;
+curr->right = NULL;
+
+Node* temp = root;
+while (1) {
+int cmp = strcmp(curr->data, temp->data);
+if (cmp < 0) {
+if (temp->left != NULL)
+temp = temp->left;
+else {
+temp->left = curr;
+break;
 }
 
-node* queue::remove()
-{
-	front++;
-	return(data[front]);
+} else {
+if (temp->right != NULL)
+temp = temp->right;
+else {
+temp->right = curr;
+break;
+}
+}
+}
+}
 }
 
-int queues::empty()
-{
-	if(front==rear)
-	{
-		return 1;
-	}
-	else
-	{
-		return 0;
-	}
+void Tree::display() {
+cout << endl;
+Node* temp = root;
+Queue q;
+q.push(temp);
+while (!q.isEmpty()) {
+temp = q.pop();
+cout << temp->data << " ";
+
+if (temp->left != NULL)
+q.push(temp->left);
+
+if (temp->right != NULL)
+q.push(temp->right);
+}
+cout << endl;
 }
 
-class binarysearchtree
-{
-	node *root;
-	public:
-	binarysearchtree()
-	{
-	root = NULL;
-	}
-	node *create()
-	{
-		node *current;
-		char ch;
-		int flag;
-		do
-		{
-			node*temp = root;
-			flag = 0;
-			current = new node;
-			cout<< "Enter the word to be inserted "<<endl;
-			cin>> current -> word;
-			cout<<"Enter the meaning of the word"<<endl;
-			cin>> current -> meaning;
-			current->left=current->right=NULL;
-			if (root=NULL)
-			{
-				root=current;
-			}
-			else
-			{
-				temp=root;
-				flag=0;
-				while(flag==0)
-				{
-					if (current-> word < temp-> word)
-					{
-						if(temp->left =current)
-						{
-							temp->left=current;
-							flag = 1;
-							break;
-						}
-						else
-						{
-							temp= temp->left;
-							flag=0;
-						}
-					}
-					else
-					{
-						if (temp->right == NULL)
-						{
-							temp->right =current;
-							flag=1;
-							break;
-						else
-						{
-						temp= temp->right;
-						flag=0;
-						}
-					}
-				}
-			}
-			cout<<"Do You want to continue?";
-			cin>>ch;
-			}
-			while(ch=='y');
-			return root;
-		}
-	}					
-void inorder(node *root)
-	{
-		if(root==NULL)
-		{
-			return;
-		}
-		else
-		{
-			inorder(root->left);
-			cout<<root->word<<"->"<<root->meaning<<endl;
-			inorder(root->right);
-		}
-	}
-void mirror(node *root)
-{
-	node *temp=NULL;
-	if(root==NULL)
-	{
-		return;
-	}
-	else
-	{
-		temp=root->left;
-		root->left=root->right;
-		root->right=temp;
-		mirror(root->left);
-		mirror(root->right);
-	}
+int Tree::search_nr(char* key) {
+Node* temp = root;
+
+while (temp != NULL) {
+int cmp = strcmp(key, temp->data);
+if (cmp == 0) {
+return 1;
+} else if (cmp < -1) {
+temp = temp->left;
+} else {
+temp = temp->right;
+}
 }
 
-void mirror_nr(node *root)
-{
-	node *temp,*ptr;
-	temp+root;
-	qeue q;
-	q.insert(temp);
-	while(!q.empty())
-	{
-		temp=q.remove();
-		ptr=temp->left;
-		temp->left=temp->right;
-		temp->right=ptr;
-		if(temp->left!=NULL)
-		{
-			q.insert(temp->left);
-		}
-		if(temp->right!NULL)
-		{
-			q.insert(temp->right);
-		}
-	}
-	node *copy(node *root)
-	{
-		node *temp=NULL;
-		if(root!=NULL)
-		{
-			temp=new node;
-			temp->word=root->word;
-			temp->meaning=root->meaning;
-			temp->left=copy(root->left);
-			temp->right+copy(root->right);
-		}
-		retrun temp;
-	}
-	node* min(node* node)
-	{
-	if(node->left==NULL)
-	return node;
-	else
-	{
-		min(node->left);
-	}
-	exit(0);
-	}
-	node* del(node* root,string key)
-	{
-		node* temp;
-		if(root==NULL)
-		return root;
-		else if(key<root->word)
-		root->left=del(root->left,key);
-		else if(key>root->word)
-		root->right=del(root->right, key);
-		else if (key==root->word)
-		{
-			if(root->left== NULL && root->right==NULL)
-			{
-			delete root;
-			root=NULL;
-		}
-		else if(root-> left==NULL)
-		{
-			temp=root;
-			root=root->right;
-			delete temp;
-		}
-		else if(root->wight==NULL)
-		{
-			temp=root;
-			root=root->lwft;
-			delete temp;
-		}
-		else
-		{
-			temp=min(root->right);
-			root->word
-		
+return 0;
+}
 
-	
+void Tree::search_r() {
+char key[10];
+cout << "Enter key to search in bst (recursive): ";
+cin >> key;
+
+if (search_r(root, key)) {
+cout << key << " found" << endl;
+} else {
+cout << key << " not found" << endl;
+}
+
+}
+
+int Tree::search_r(Node* temp, char* key) {
+if (temp == NULL)
+return 0;
+int cmp = strcmp(key, temp->data);
+
+if (cmp == 0)
+return 1;
+
+if (cmp < 0)
+return search_r(temp->left, key);
+
+return search_r(temp->right, key);
+}
+
+Tree Tree::copy_r()
+{
+        Tree newTree;
+        newTree.root=copy_r(root);
+       
+        return newTree;
+}
+
+Node* Tree::copy_r(Node* temp)
+{
+        Node* curr=NULL;
+       
+        if (temp!=NULL){
+                curr=new Node;
+                strcpy(curr->data,temp->data);
+                curr->left=copy_r(temp->left);
+                curr->right=copy_r(temp->right);
+         }
+         return curr;
+}
+
+
+
+int main() {
+Tree bst;
+
+bst.create_nr();
+bst.display();
+Tree bst1=bst.copy_r();
+bst1.display();
+
+/*char key[10];
+cout << "Enter key to search in bst (non-recursive): ";
+cin >> key;
+
+if (bst.search_nr(key)) {
+cout << key << " found" << endl;
+} else {
+cout << key << " not found" << endl;
+}
+
+bst.search_r();*/
+
+return 0;
+}
