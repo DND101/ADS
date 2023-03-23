@@ -1,0 +1,126 @@
+
+#include<iostream>
+#define INFI 32676
+using namespace std;
+
+class prim
+{
+int cost [20] [20];
+int t [20] [20];
+int n;
+
+public:
+prim();
+void accept();
+void display();
+int prims();
+};
+
+prim::prim()
+{
+cout<<"Enter no. of vertices:";
+cin>>n;
+for(int i=0;i<n;i++)
+{
+for(int j=0;j<n;j++)
+{
+cost[i][j]=INFI;
+}
+}
+}
+
+void prim::accept()
+{
+int e;
+cout<<"Enter no. of edges:";
+cin>>e;
+for (int k=0;k<e;k++)
+{
+int i,j;
+cout<<"Enter  i,j and cost:";
+cin>>i>>j;
+cin>>cost[i][j];
+cost[j][i]=cost[i][j];
+}
+}
+
+void prim::display()
+{
+cout<<"Cost matrix is:"<<endl;
+for (int i=0;i<n;i++)
+{
+for(int j=0;j<n;j++)
+{
+cout<<cost[i][j]<<"\t";
+}
+cout<<endl;
+}
+}
+
+int prim::prims()
+{
+int i,j,k;
+int stv;
+int r=0;
+int nearest[10];
+int mincost=0;
+cout<<"Enter starting vertex:";
+cin>>stv;
+nearest[stv]=-1;
+for(i=0;i<n;i++)
+{
+if(i!=stv)
+nearest[i]=stv;
+}
+for (int i=0;i<n;i++)
+{
+int min=INFI;
+for(int k=0;k<n;k++)
+{
+if(nearest[k]!=-1 && cost[k][nearest[k]]<min)
+{
+j=k;
+min=cost[k][nearest[k]];
+}
+}
+t[r][0]=j;
+t[r][1]=nearest[j];
+t[r][2]=cost[j][nearest[j]];
+r++;
+
+mincost=mincost+cost[j][nearest[j]];
+nearest[j]=-1;
+
+for(k=0;k<n;k++)
+{
+if(nearest[k]!=-1 && (cost[k][nearest[k]])>cost[k][j])
+nearest[k]=j;
+}
+}
+return mincost;
+}
+
+
+
+
+
+
+int main()
+{
+prim p;
+p.accept();
+p.display();
+//p.prims();
+cout<<"Cost of min spanning tree:"<<p.prims();
+return 0;
+}
+/*
+0 1 8
+0 2 4
+0 3 10
+1 2 9
+1 4 5
+2 3 12
+2 4 6
+3 4 7
+*/
